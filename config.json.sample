@@ -1,9 +1,18 @@
 {
   "S2D_TOKEN": "<discord_token>",
-  "S2D_COMMAND": ["date +%S", "date +%H"],
-  "S2D_EXPECTED": ["05", "01"],
+  "S2D_COMMAND": ["date +%S", "date +%H 1>&2"],
+  "S2D_EXPECTED": [
+    {
+      "output": "stdout",
+      "context": "05"
+    },
+    {
+      "output": "stderr",
+      "context": "01"
+    }
+  ],
   "S2D_STATUS": [
-    ["We're at XX:XX:05", "We're not at XX:XX:05"],
+    [["We're at XX:XX:05", "We're not at XX:XX:05"]],
     ["We're at 01:XX:XX", "We're not at 01:XX:XX"]
   ],
   "S2D_INTERVAL": "5"
