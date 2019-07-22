@@ -1,0 +1,21 @@
+{
+  "name": "status2discord",
+  "version": "1.0.0",
+  "description": "Run shell command and send status to discord",
+  "keywords": [
+    "shell",
+    "discord",
+    "status",
+    "bot"
+  ],
+  "dependencies": {
+    "discord.js": ">=11.4.2",
+    "zlib-sync": ">=0.1.4",
+    "erlpack": "discordapp/erlpack",
+    "@discordjs/uws": ">=11.149.1"
+  },
+  "scripts": {
+    "test": "",
+    "start": ""
+  }
+}
