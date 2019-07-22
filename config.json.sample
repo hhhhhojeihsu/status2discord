@@ -1,0 +1,10 @@
+{
+  "S2D_TOKEN": "",
+  "S2D_COMMAND": ["", ""],
+  "S2D_EXPECTED": ["", ""],
+  "S2D_STATUS": [
+    ["", ""],
+    ["", ""]
+  ],
+  "S2D_INTERVAL": ""
+}
