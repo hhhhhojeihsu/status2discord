@@ -1,6 +1,8 @@
 {
   "name": "status2discord",
   "version": "1.0.0",
+  "repository": "https://github.com/hhhhhojeihsu/status2discord",
+  "license": "MIT",
   "description": "Run shell command and send status to discord",
   "keywords": [
     "shell",
