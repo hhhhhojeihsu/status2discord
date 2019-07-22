@@ -1,10 +1,10 @@
 {
-  "S2D_TOKEN": "",
-  "S2D_COMMAND": ["", ""],
-  "S2D_EXPECTED": ["", ""],
+  "S2D_TOKEN": "<discord_token>",
+  "S2D_COMMAND": ["date +%S", "date +%H"],
+  "S2D_EXPECTED": ["05", "01"],
   "S2D_STATUS": [
-    ["", ""],
-    ["", ""]
+    ["We're at XX:XX:05", "We're not at XX:XX:05"],
+    ["We're at 01:XX:XX", "We're not at 01:XX:XX"]
   ],
-  "S2D_INTERVAL": ""
+  "S2D_INTERVAL": "5"
 }
