@@ -64,7 +64,7 @@ function set_status_up(idx)
     case 0:
     case 1:
       status[idx] = 2;
-      channel.send(config.S2D_STATUS[idx][0]);
+      channel.send("[:white_check_mark:] " + config.S2D_STATUS[idx][0]);
     case 2:
     default:
       break;
@@ -81,7 +81,7 @@ function set_status_down(idx, err, stdstream)
     case 1:
     case 2:
       status[idx] = 0;
-      channel.send(config.S2D_STATUS[idx][1]);
+      channel.send("[:x:] " + config.S2D_STATUS[idx][1]);
     case 0:
     default:
       break;
