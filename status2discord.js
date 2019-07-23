@@ -23,29 +23,78 @@ client.login(config.S2D_TOKEN);
 async function run_command() {
   for(let command_idx = 0; command_idx < config.S2D_COMMAND.length; ++command_idx)
   {
-    const { stdout, stderr } = await exec(config.S2D_COMMAND[command_idx]);
-    var compare_target;
-    if(config.S2D_EXPECTED[command_idx]['output'] === 'stdout')
-    {
-      compare_target = stdout;
-    }
-    else // config.S2D_EXPECTED[command_idx]['output'] === 'stderr'
-    {
-      compare_target = stderr;
-    }
+    var err_flag = 0;
+    var stdstream;
     console.log(Date.now())
-    if(compare_target === config.S2D_EXPECTED[command_idx]['context'])
+
+    try
     {
-      console.log(config.S2D_STATUS[command_idx][0]);
+      stdstream = await exec(config.S2D_COMMAND[command_idx]);
+    }
+    catch(err)
+    {
+      console.log('non-zero return value');
+      err_flag = 1;
+    }
+    if(err_flag === 1)
+    {
+      set_status_down(command_idx, 1, 0);
+      err_flag = 0;
     }
     else
     {
-      console.log('stdout: ', stdout);
-      console.log('stderr: ', stderr);
-      console.log(`expected${config.S2D_EXPECTED[command_idx]['output']}: `, config.S2D_EXPECTED[command_idx]['context']);
+      var compare_target = (config.S2D_EXPECTED[command_idx]['output'] === 'stdout') ? stdstream['stdout'] : stdstream['stderr'];
+      if(compare_target === config.S2D_EXPECTED[command_idx]['context'])
+      {
+        set_status_up(command_idx);
+      }
+      else //compare_target !== config.S2D_EXPECTED[command_idx]['context']
+      {
+        set_status_down(command_idx, 0, stdstream);
+      }
     }
-    console.log('---')
+    console.log('---');
   }
+}
+
+function set_status_up(idx)
+{
+  switch(status[idx])
+  {
+    case 0:
+    case 1:
+      status[idx] = 2;
+      channel.send(config.S2D_STATUS[idx][0]);
+    case 2:
+    default:
+      break;
+  }
+  console.log(config.S2D_STATUS[idx][0]);
+
+  return;
+}
+
+function set_status_down(idx, err, stdstream)
+{
+  switch(status[idx])
+  {
+    case 1:
+    case 2:
+      status[idx] = 0;
+      channel.send(config.S2D_STATUS[idx][1]);
+    case 0:
+    default:
+      break;
+  }
+
+  if(err === 0)
+  {
+    console.log('stdout: ', stdstream['stdout']);
+    console.log('stderr: ', stdstream['stderr']);
+  }
+  console.log(`expected: `, config.S2D_EXPECTED[idx]['context']);
+
+  return;
 }
 
 setInterval(function () {
