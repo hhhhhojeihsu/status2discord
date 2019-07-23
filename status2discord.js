@@ -8,9 +8,13 @@ const exec = util.promisify(require('child_process').exec);
 // Load config
 const config = require('./config.json');
 var check_interval = config.S2D_INTERVAL * 60 * 1000;
+// 0 -> Down, 1 -> Unknown, 2 -> Up
+var status = Array(config.S2D_COMMAND.length).fill(1);
+var channel;
 
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
+  channel = client.channels.find('name', config.S2D_CHANNEL.replace('#', ''));
 });
 
 client.login(config.S2D_TOKEN);
