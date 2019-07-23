@@ -20,10 +20,26 @@ async function run_command() {
   for(let command_idx = 0; command_idx < config.S2D_COMMAND.length; ++command_idx)
   {
     const { stdout, stderr } = await exec(config.S2D_COMMAND[command_idx]);
+    var compare_target;
+    if(config.S2D_EXPECTED[command_idx]['output'] === 'stdout')
+    {
+      compare_target = stdout;
+    }
+    else // config.S2D_EXPECTED[command_idx]['output'] === 'stderr'
+    {
+      compare_target = stderr;
+    }
     console.log(Date.now())
-    console.log('command:', config.S2D_COMMAND[command_idx]);
-    console.log('stdout:', stdout);
-    console.log('stderr:', stderr);
+    if(compare_target === config.S2D_EXPECTED[command_idx]['context'])
+    {
+      console.log(config.S2D_STATUS[command_idx][0]);
+    }
+    else
+    {
+      console.log('stdout: ', stdout);
+      console.log('stderr: ', stderr);
+      console.log(`expected${config.S2D_EXPECTED[command_idx]['output']}: `, config.S2D_EXPECTED[command_idx]['context']);
+    }
     console.log('---')
   }
 }
