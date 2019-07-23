@@ -15,5 +15,6 @@
     [["We're at XX:XX:05", "We're not at XX:XX:05"]],
     ["We're at 01:XX:XX", "We're not at 01:XX:XX"]
   ],
-  "S2D_INTERVAL": "5"
+  "S2D_INTERVAL": "5",
+  "S2D_CHANNEL": "#general"
 }
