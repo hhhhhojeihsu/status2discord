@@ -17,7 +17,6 @@
     "@discordjs/uws": ">=11.149.1"
   },
   "scripts": {
-    "test": "",
-    "start": ""
+    "start": "node ./status2discord.js"
   }
 }
