@@ -14,7 +14,7 @@ var channel;
 
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
-  channel = client.channels.find('name', config.S2D_CHANNEL.replace('#', ''));
+  channel = client.channels.find(val => val.name === config.S2D_CHANNEL.replace('#', '') && val.type === 'text');
 });
 
 client.login(config.S2D_TOKEN);
