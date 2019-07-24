@@ -14,6 +14,12 @@ var channel;
 
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
+  client.user.setPresence({
+    game: {
+      name: 'Monitoring status',
+      type: 'WATCHING'
+    }
+  });
   channel = client.channels.find(val => val.name === config.S2D_CHANNEL.replace('#', '') && val.type === 'text');
 });
 
@@ -21,6 +27,7 @@ client.login(config.S2D_TOKEN);
 
 // Run command based on interval
 async function run_command() {
+  var output = "";
   for(let command_idx = 0; command_idx < config.S2D_COMMAND.length; ++command_idx)
   {
     var err_flag = 0;
@@ -38,7 +45,7 @@ async function run_command() {
     }
     if(err_flag === 1)
     {
-      set_status_down(command_idx, 1, 0);
+      output += set_status_down(command_idx, 1, 0);
       err_flag = 0;
     }
     else
@@ -46,42 +53,47 @@ async function run_command() {
       var compare_target = (config.S2D_EXPECTED[command_idx]['output'] === 'stdout') ? stdstream['stdout'] : stdstream['stderr'];
       if(compare_target === config.S2D_EXPECTED[command_idx]['context'])
       {
-        set_status_up(command_idx);
+        output += set_status_up(command_idx);
       }
       else //compare_target !== config.S2D_EXPECTED[command_idx]['context']
       {
-        set_status_down(command_idx, 0, stdstream);
+        output += set_status_down(command_idx, 0, stdstream);
       }
     }
     console.log('---');
   }
+  if(output !== "")
+    channel.send(output);
+  return;
 }
 
 function set_status_up(idx)
 {
+  var output = "";
   switch(status[idx])
   {
     case 0:
     case 1:
       status[idx] = 2;
-      channel.send("[:white_check_mark:] " + config.S2D_STATUS[idx][0]);
+      output = "[:white_check_mark:] " + config.S2D_STATUS[idx][0] + "\n";
     case 2:
     default:
       break;
   }
   console.log(config.S2D_STATUS[idx][0]);
 
-  return;
+  return output;
 }
 
 function set_status_down(idx, err, stdstream)
 {
+  var output = "";
   switch(status[idx])
   {
     case 1:
     case 2:
       status[idx] = 0;
-      channel.send("[:x:] " + config.S2D_STATUS[idx][1]);
+      output = "[:x:] " + config.S2D_STATUS[idx][1] + "\n";
     case 0:
     default:
       break;
@@ -94,7 +106,7 @@ function set_status_down(idx, err, stdstream)
   }
   console.log(`expected: `, config.S2D_EXPECTED[idx]['context']);
 
-  return;
+  return output;
 }
 
 setInterval(function () {
